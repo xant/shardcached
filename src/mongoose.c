@@ -2860,6 +2860,7 @@ typedef struct {
     unsigned char buffer[64];
 } SHA1_CTX;
 
+#pragma GCC diagnostic ignored "-Wstringop-overread"
 static void SHA1Transform(uint32_t state[5], const unsigned char buffer[64]) {
   uint32_t a, b, c, d, e;
   union char64long16 block[1];

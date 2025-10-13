@@ -117,6 +117,58 @@ st_fetch(void *key, size_t klen, void **value, size_t *vlen, void *priv)
 }
 
 static int
+st_fetch_local(void *key, size_t klen, int *local_fd, size_t *vlen, void *priv) {
+    storage_fs_t *storage = (storage_fs_t *)priv;
+    char *intermediate_dir = NULL;
+    char *fullpath = st_fs_filename(storage->path,
+                                    key,
+                                    klen,
+                                    &intermediate_dir);
+ 
+    int fd = open(fullpath, O_RDONLY);
+    if (fd < 0) {
+        // TODO - log
+        return -1;
+    }
+    struct stat st;
+    int rc = fstat(fd, &st);
+    if (rc == 0) {
+        *local_fd = fd;
+        if (vlen) {
+            *vlen = st.st_size;
+        }
+        return 0;
+    }
+    return -1;
+}
+
+static int
+st_store_local(void *key, size_t klen, char *local_path, size_t vlen, int if_not_exists, void *priv) {
+    storage_fs_t *storage = (storage_fs_t *)priv;
+    char *intermediate_dir = NULL;
+    char *fullpath = st_fs_filename(storage->path,
+                                    key,
+                                    klen,
+                                    &intermediate_dir);
+    
+    if (if_not_exists) {
+        struct stat st;
+        if (stat(fullpath, &st) == 0) {
+            SHC_DEBUG4("Key already exists.");
+            return -1;
+        }
+    }
+    int ret = rename(local_path, fullpath);
+    if (ret != 0) {
+        SHC_ERROR("Can't store data on file %s : %s\n",
+                   fullpath, strerror(errno));
+    }
+
+    free(fullpath);
+    return ret;
+}
+
+static int
 st_store(void *key, size_t klen, void *value, size_t vlen, int if_not_exists, void *priv)
 {
     storage_fs_t *storage = (storage_fs_t *)priv;
@@ -306,7 +358,8 @@ storage_fs_walk_and_fill_index(char *path, hashtable_t *index)
                 {
                     size_t namelen = strlen(dirent->d_name);
                     size_t keylen = namelen/2;
-                    char *keyname = malloc(keylen);
+                    char *keyname = malloc(keylen+1);
+                    keyname[keylen] = 0;
                     char *p = keyname;
                     int i;
                     for (i = 0; i < namelen; i+=2) {
@@ -345,6 +398,8 @@ storage_fs_init(shardcache_storage_t *st, char **options)
     st->exist  = st_exist;
     st->index  = st_index;
     st->count  = st_count;
+    st->fetch_local = st_fetch_local;
+    st->store_local = st_store_local;
 
     storage_fs_t *storage = NULL;
     char *storage_path = NULL;
