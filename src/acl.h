@@ -9,10 +9,11 @@ typedef enum {
 } shcd_acl_action_t;
 
 typedef enum {
-    SHCD_ACL_METHOD_GET = 0x00,
-    SHCD_ACL_METHOD_PUT = 0x01,
-    SHCD_ACL_METHOD_DEL = 0x02,
-    SHCD_ACL_METHOD_ANY = 0xff
+    SHCD_ACL_METHOD_GET  = 0x00,
+    SHCD_ACL_METHOD_PUT  = 0x01,
+    SHCD_ACL_METHOD_DEL  = 0x02,
+    SHCD_ACL_METHOD_POST = 0x03,
+    SHCD_ACL_METHOD_ANY  = 0xff
 } shcd_acl_method_t;
 
 typedef struct _shcd_acl_item_s shcd_acl_item_t;

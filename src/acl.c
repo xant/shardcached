@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <errno.h>
 #include <shardcache.h>
+#include <shardcache_log.h>
 
 struct _shcd_acl_item_s {
     regex_t exp;
