@@ -985,7 +985,6 @@ shcd_http_create(shardcache_t *cache,
 
             }
             if (strcmp(option, "listening_port") == 0 && i > 0) {
-                //mg_set_listening_socket(wrk->server, mg_get_listening_socket(TAILQ_FIRST(&http->workers)->server));
                 mg_copy_listeners(TAILQ_FIRST(&http->workers)->server, wrk->server);
             } else {
                 const char *msg = mg_set_option(wrk->server, option, value);

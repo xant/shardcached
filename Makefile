@@ -7,7 +7,7 @@ DEPS += deps/.libs/libshardcache.a \
         deps/.libs/libsiphash.a
 
 CFLAGS += -DBUILD_INFO="$(BUILD_INFO)"
-LDFLAGS += -L.
+LDFLAGS += -L. -lssl
 
 ifeq ($(UNAME), Linux)
 LDFLAGS += -pthread
@@ -16,7 +16,7 @@ LDFLAGS +=
 CFLAGS += -Wno-deprecated-declarations
 endif
 
-MONGOOSE_OPTIONS="-DMONGOOSE_NO_CGI -DMONGOOSE_NO_DAV -DMONGOOSE_NO_SOCKETPAIR -DMONGOOSE_NO_DIRECTORY_LISTING"
+MONGOOSE_OPTIONS=-DMONGOOSE_NO_CGI -DMONGOOSE_NO_DAV -DMONGOOSE_NO_SOCKETPAIR -DMONGOOSE_NO_DIRECTORY_LISTING -DNS_ENABLE_SSL
 
 #CC = gcc
 TARGETS = $(patsubst %.c, %.o, $(wildcard src/*.c))

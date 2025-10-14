@@ -74,6 +74,7 @@ typedef struct {
     char baseadminpath[256];
     int foreground;
     int loglevel;
+    char ssl_cert[1024];
     char listen_address[256];
     shardcache_node_t **nodes;
     int  num_nodes;
@@ -120,6 +121,7 @@ static shardcached_config_t config = {
     .baseadminpath = "",
     .foreground = 0,
     .loglevel = SHARDCACHED_LOGLEVEL_DEFAULT,
+    .ssl_cert = "",
     .listen_address = SHARDCACHED_ADDRESS_DEFAULT,
     .nodes = NULL,
     .num_nodes = 0,
@@ -595,6 +597,10 @@ int config_handler(void *user,
             snprintf(config->baseadminpath, sizeof(config->baseadminpath),
                     "%s", value);
         }
+        else if (strcmp(name, "ssl_cert") == 0 ) {
+            snprintf(config->ssl_cert, sizeof(config->ssl_cert),
+                    "%s", value);
+        }
         else if (strcmp(name, "listen") == 0)
         {
             if (!config_listening_address((char *)value, config)) {
@@ -1005,7 +1011,11 @@ int main(int argc, char **argv)
         SHC_NOTICE("HTTP subsystem has been administratively disabled");
     } else {
         // initialize the http options
-        const char *mongoose_options[] = { "listening_port", config.listen_address,
+        char mongoose_port[2048];
+        snprintf(mongoose_port, sizeof(mongoose_port), "%s://%s:%s", 
+            config.ssl_cert[0] ? "ssl" : "tcp", config.listen_address, config.ssl_cert);
+        
+        const char *mongoose_options[] = { "listening_port", mongoose_port,
                                            "access_log_file", config.access_log_file,
                                             NULL };
 

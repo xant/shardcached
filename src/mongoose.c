@@ -5113,9 +5113,14 @@ void mg_copy_listeners(struct mg_server *s, struct mg_server *to) {
 
 #if defined(NS_ENABLE_SSL) && defined(HEADER_SSL_H)
       /* OpenSSL only. See https://github.com/cesanta/mongoose/issues/441 */
+// XXX - apparently in modern openssl SSL_CTX is opaque.
+//       This needs some more investigations, disabling for now and
+//       assume it's ok to use the same context from multiple worksrs
+/*
       if (tmp->ssl_ctx != NULL) {
         tmp->ssl_ctx->references++;
       }
+*/
 #endif
 
       tmp->mgr = &to->ns_mgr;
