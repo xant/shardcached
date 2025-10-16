@@ -341,6 +341,8 @@ int config_acl(char *pattern, char *aclstr)
         method = SHCD_ACL_METHOD_PUT;
     } else if (strcasecmp(method_string, "DELETE") == 0) {
         method = SHCD_ACL_METHOD_DEL;
+    } else if (strcasecmp(method_string, "POST") == 0) {
+        method = SHCD_ACL_METHOD_POST;
     } else {
         SHC_ERROR("Invalid acl method %s (can be 'GET' or 'PUT' or 'DELETE')", method_string);
         return -1;
