@@ -357,7 +357,7 @@ int config_acl(char *pattern, char *aclstr)
     }
     char *maskstr = p;
     if (maskstr && *maskstr) {
-        mask = -1 << strtol(maskstr, NULL, 10);
+        mask = htonl(-1 << 32 - strtol(maskstr, NULL, 10));
     }
     if (*ipaddr_string == '*' && strlen(ipaddr_string) == 1) {
         ip.s_addr = 0;
