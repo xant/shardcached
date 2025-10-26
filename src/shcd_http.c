@@ -205,9 +205,9 @@ shardcached_build_index_response(fbuf_t *buf, int do_html, shardcache_t *cache, 
         if (do_html) {
             char *encodedName = url_encode(keystr);
             fbuf_printf(buf,
-                        "<tr bgcolor='#ffffff'><td><a href='/%s/%s'>%s</a></td>"
+                        "<tr bgcolor='#ffffff'><td><a href='%s'>%s</a></td>"
                         "<td>(%d)</td></tr>",
-                        basepath, encodedName, keystr,
+                        encodedName, keystr,
                         index->items[i].vlen);
             free(encodedName);
         } else {
@@ -721,7 +721,7 @@ shardcached_handle_post_request(http_worker_t *wrk, struct mg_connection *conn, 
 
 
     fbuf_t output_data = FBUF_STATIC_INITIALIZER;
-    fbuf_printf(&output_data, "<html><body>Data stored successfully. Go to the <a href=\"/%s/__index__\">Index</a>", wrk->basepath);
+    fbuf_printf(&output_data, "<html><body>Data stored successfully. Go to the <a href=\"__index__\">Index</a>");
 
     connection_param_t *cp = (connection_param_t *)conn->connection_param;
     if (cp != NULL) {
