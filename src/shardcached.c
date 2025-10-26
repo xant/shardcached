@@ -687,35 +687,35 @@ void parse_cmdline(int argc, char **argv)
     int option_index = 0;
 
     static struct option long_options[] = {
-        {"cfgfile", 2, 0, 'c'},
-        {"access_log", 2, 0, 'a'},
-        {"basepath", 2, 0, 'b'},
-        {"baseadminpath", 2, 0, 'B'},
-        {"plugins_directory", 2, 0, 'd'},
-        {"conn_expire_time", 2, 0, 'e'},
-        {"expire_time", 2, 0, 'E'},
-        {"foreground", 0, 0, 'f'},
-        {"stats_interval", 2, 0, 'i'},
-        {"listen", 2, 0, 'l'},
-        {"lazy_expiration", 0, 0, 'L'},
-        {"me", 2, 0, 'm'},
-        {"arc_mode_loose", 0, 0, 'M'},
-        {"nodes", 2, 0, 'n'},
-        {"pidfile", 2, 0, 'p'},
-        {"mux_timeout_low", 2, 0, 'r'},
-        {"mux_timeout_high", 2, 0, 'R'},
-        {"size", 2, 0, 's'},
-        {"type", 2, 0, 't'},
-        {"tcp_timeout", 2, 0, 'T'},
-        {"options", 2, 0, 'o'},
-        {"verbose", 0, 0, 'v'},
-        {"workers", 2, 0, 'w'},
-        {"migrate", 2, 0, 'x'},
-        {"nohttp", 0, 0, 'H'},
-        {"nostorage", 0, 0, 'N'},
-        {"user", 2, 0, 'u'},
-        {"help", 0, 0, 'h'},
-        {"version", 0, 0, 'V'},
+        {"cfgfile", required_argument, 0, 'c'},
+        {"access_log", required_argument, 0, 'a'},
+        {"basepath", required_argument, 0, 'b'},
+        {"baseadminpath", required_argument, 0, 'B'},
+        {"plugins_directory", required_argument, 0, 'd'},
+        {"conn_expire_time", required_argument, 0, 'e'},
+        {"expire_time", required_argument, 0, 'E'},
+        {"foreground", no_argument, 0, 'f'},
+        {"stats_interval", required_argument, 0, 'i'},
+        {"listen", required_argument, 0, 'l'},
+        {"lazy_expiration", no_argument, 0, 'L'},
+        {"me", required_argument, 0, 'm'},
+        {"arc_mode_loose", no_argument, 0, 'M'},
+        {"nodes", required_argument, 0, 'n'},
+        {"pidfile", required_argument, 0, 'p'},
+        {"mux_timeout_low", required_argument, 0, 'r'},
+        {"mux_timeout_high", required_argument, 0, 'R'},
+        {"size", required_argument, 0, 's'},
+        {"type", required_argument, 0, 't'},
+        {"tcp_timeout", required_argument, 0, 'T'},
+        {"options", required_argument, 0, 'o'},
+        {"verbose", no_argument, 0, 'v'},
+        {"workers", required_argument, 0, 'w'},
+        {"migrate", required_argument, 0, 'x'},
+        {"nohttp", no_argument, 0, 'H'},
+        {"nostorage", no_argument, 0, 'N'},
+        {"user", required_argument, 0, 'u'},
+        {"help", no_argument, 0, 'h'},
+        {"version", no_argument, 0, 'V'},
         {0, 0, 0, 0}
     };
 
@@ -723,7 +723,7 @@ void parse_cmdline(int argc, char **argv)
     while ((c = getopt_long (argc, argv, "a:b:B:c:d:e:E:fFg:hHi:l:Lm:Mn:Np:P:r:R:s:t:T:o:u:vVw:x:?",
                              long_options, &option_index)))
     {
-        if (c == -1) {
+        if (c == 0xff) {
             break;
         }
         switch (c) {
